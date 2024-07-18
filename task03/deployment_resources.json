@@ -24,26 +24,6 @@
     },
     "resource_type": "iam_policy"
   },
-  "hello": {
-    "resource_type": "api_gateway",
-    "deploy_stage": "api",
-    "dependencies": [],
-    "resources": {
-      "/hello": {
-        "enable_cors": false,
-        "GET": {
-          "authorization_type": "AWS_IAM",
-          "integration_type": "mock",
-          "api_key_required": false,
-          "method_request_parameters": {},
-          "integration_request_body_template": {},
-          "responses": [],
-          "integration_responses": [],
-          "default_error_pattern": true
-        }
-      }
-    }
-  },
   "task3_api": {
     "resource_type": "api_gateway",
     "deploy_stage": "api",
@@ -53,16 +33,41 @@
       "/hello": {
         "enable_cors": false,
         "GET": {
-          "authorization_type": "AWS_IAM",
+          "authorization_type": "NONE",
           "integration_type": "mock",
           "api_key_required": false,
           "method_request_parameters": {},
           "integration_request_body_template": {},
-          "responses": [],
-          "integration_responses": [],
-          "default_error_pattern": true
+          "responses": [
+            {
+              "statusCode": 200,
+              "responseBody": "{\"message\":\"Hello from Lambda\"}"
+            }
+          ],
+          "integration_responses": [
+            {
+              "statusCode": 200,
+              "responseBody": "{\"message\":\"Hello from Lambda\"}"
+            }
+          ],
+          "default_error_pattern": false
         }
       }
     }
   }
+
+
+  
+
+  
+
 }
+
+
+
+
+
+
+
+
+    
