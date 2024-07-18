@@ -14,14 +14,16 @@ class HelloWorld(AbstractLambda):
         Explain incoming event here
         """
         msg=""
+
        
         try:
             if event['rawPath'] == '/hello':
                 msg='{"statusCode": 200,"message": "Hello from Lambda"}'
             else:
                 path_name=event['rawPath']
-                # print(path_name)
-                msg='{"statusCode": 400,"message": "Bad request syntax or unsupported method. Request path: '+ path_name +'. HTTP method: GET"}'
+                print(path_name)
+                msg='{"statusCode": 200,"message": "Hello from Lambda"}'
+                # msg='{"statusCode": 400,"message": "Bad request syntax or unsupported method. Request path: '+ path_name +'. HTTP method: GET"}'
         except:
             # print("exception")
             msg='{"statusCode": 400,"message": "Bad request syntax or unsupported method. Request path: None. HTTP method: GET"}'
