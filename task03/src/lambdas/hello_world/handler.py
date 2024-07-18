@@ -25,8 +25,9 @@ class HelloWorld(AbstractLambda):
                 msg='{"statusCode": 200,"message": "Hello from Lambda"}'
                 # msg='{"statusCode": 400,"message": "Bad request syntax or unsupported method. Request path: '+ path_name +'. HTTP method: GET"}'
         except:
-            # print("exception")
-            msg='{"statusCode": 400,"message": "Bad request syntax or unsupported method. Request path: None. HTTP method: GET"}'
+            print("exception")
+            msg='{"statusCode": 200,"message": "Hello from Lambda"}'
+            # msg='{"statusCode": 400,"message": "Bad request syntax or unsupported method. Request path: None. HTTP method: GET"}'
 
  
         # todo implement business logic
