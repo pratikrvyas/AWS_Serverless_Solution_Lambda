@@ -1,6 +1,6 @@
 {
-  "sqs_handle-role": {
-    "predefined_policies": ["AWSLambdaSQSQueueExecutionRole"],
+  "sns_handle-role": {
+    "predefined_policies": ["AmazonSNSFullAccess","AmazonSNSReadOnlyAccess","AmazonSNSRole"],
     "principal_service": "lambda",
     "custom_policies": [
       "lambda-basic-execution"
