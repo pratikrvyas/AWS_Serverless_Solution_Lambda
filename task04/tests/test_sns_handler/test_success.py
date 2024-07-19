@@ -1,7 +1,7 @@
-from tests.test_sns_handle import SnsHandleLambdaTestCase
+from tests.test_sns_handler import SnsHandlerLambdaTestCase
 
 
-class TestSuccess(SnsHandleLambdaTestCase):
+class TestSuccess(SnsHandlerLambdaTestCase):
 
     def test_success(self):
         pass

@@ -3,12 +3,12 @@ import importlib
 from tests import ImportFromSourceContext
 
 with ImportFromSourceContext():
-    LAMBDA_HANDLER = importlib.import_module('lambdas.sns_handle.handler')
+    LAMBDA_HANDLER = importlib.import_module('lambdas.sns_handler.handler')
 
 
-class SnsHandleLambdaTestCase(unittest.TestCase):
+class SnsHandlerLambdaTestCase(unittest.TestCase):
     """Common setups for this lambda"""
 
     def setUp(self) -> None:
-        self.HANDLER = LAMBDA_HANDLER.SnsHandle()
+        self.HANDLER = LAMBDA_HANDLER.SnsHandler()
 

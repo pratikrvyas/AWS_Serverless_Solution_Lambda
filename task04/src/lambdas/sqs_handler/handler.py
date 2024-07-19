@@ -1,7 +1,7 @@
 from commons.log_helper import get_logger
 from commons.abstract_lambda import AbstractLambda
 
-_LOG = get_logger('SnsHandle-handler')
+_LOG = get_logger('SqsHandler-handler')
 
 import json
 import logging
@@ -11,7 +11,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-class SnsHandle(AbstractLambda):
+class SqsHandler(AbstractLambda):
 
     def validate_request(self, event) -> dict:
         pass
@@ -20,17 +20,18 @@ class SnsHandle(AbstractLambda):
         """
         Explain incoming event here
         """
-        print("SNS Message")
+        
+        print("SQS Message")
         
         # Log the message content
-        logger.info("SNS message processed successfully!")
-        _LOG.info("SNS message processed successfully!")
+        logger.info("SQS message processed successfully!")
+        _LOG.info("SQS message processed successfully!")
     
         
-        return {'statusCode': 200,'body': json.dumps('SNS message processed successfully!')}
+        return {'statusCode': 200,'body': json.dumps('SQS message processed successfully!')}
     
 
-HANDLER = SnsHandle()
+HANDLER = SqsHandler()
 
 
 def lambda_handler(event, context):

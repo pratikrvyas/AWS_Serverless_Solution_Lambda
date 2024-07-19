@@ -1,7 +1,7 @@
-from tests.test_sqs_handle import SqsHandleLambdaTestCase
+from tests.test_sqs_handler import SqsHandlerLambdaTestCase
 
 
-class TestSuccess(SqsHandleLambdaTestCase):
+class TestSuccess(SqsHandlerLambdaTestCase):
 
     def test_success(self):
         pass
