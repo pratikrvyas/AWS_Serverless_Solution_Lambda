@@ -61,6 +61,7 @@ class ApiHandler(AbstractLambda):
             'body':  dict(map(lambda item: (item[0], item[1]), content.items()))
             
         }
+        print(item)
        
         print("4")
         # Write the item to the DynamoDB table
@@ -68,10 +69,12 @@ class ApiHandler(AbstractLambda):
 
         try:
             print("5")
-            table.put_item(Item=item)
+            response=table.put_item(Item=item)
+            print(response)
+            print("6")
             
         except Exception as e:
-            print("6")
+            print("7")
             print(e)
            
 
