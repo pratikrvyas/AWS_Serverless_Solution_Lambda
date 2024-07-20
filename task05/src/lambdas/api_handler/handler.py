@@ -36,15 +36,29 @@ class ApiHandler(AbstractLambda):
         
         print("3")
         # Get the current date and time in ISO 8601 format
-        # date time in ISO 8601 formatted string(2024-01-01T00:00:00.000Z|2024-01-01T00:00:00.000000)'
         created_at = datetime.now().isoformat()
         
         # Create the item to be written to DynamoDB
+        # item_1 = {
+        #     'id': item_id,
+        #     'principalId': event['principalId'],
+        #     'createdAt': created_at,
+        #     'body':  content
+            
+        # }
+
+        # item={
+        #         "id":  item_id,
+        #         "principalId": {"N": event['principalId']},
+        #         "createdAt": {"S": created_at},
+        #         "body": {"M": {"content": content}}
+        #         }
+
         item = {
             'id': item_id,
-            'principalId': event['principalId'],
+            'principalId': int(event['principalId']),
             'createdAt': created_at,
-            'body':  content
+            'body':  dict(map(lambda item: (item[0], item[1]), content.items()))
             
         }
        
@@ -53,11 +67,13 @@ class ApiHandler(AbstractLambda):
         # table.put_item(Item=item)
 
         try:
-            response = table.put_item(Item=item)
-            print(response)
+            print("5")
+            table.put_item(Item=item)
+            
         except Exception as e:
-            response = 'Could not process your request: {}'.format(e.response['Error']['Message'])
-            print(response)
+            print("6")
+            print(e)
+           
 
         # todo implement business logic
         
