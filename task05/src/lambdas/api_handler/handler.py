@@ -36,6 +36,7 @@ class ApiHandler(AbstractLambda):
         
         print("3")
         # Get the current date and time in ISO 8601 format
+        # date time in ISO 8601 formatted string(2024-01-01T00:00:00.000Z|2024-01-01T00:00:00.000000)'
         created_at = datetime.now().isoformat()
         
         # Create the item to be written to DynamoDB
@@ -43,11 +44,10 @@ class ApiHandler(AbstractLambda):
             'id': item_id,
             'principalId': event['principalId'],
             'createdAt': created_at,
-            'body': {
-                'content': content
-            }
+            'body':  content
+            
         }
-        print(item)
+       
         print("4")
         # Write the item to the DynamoDB table
         # table.put_item(Item=item)
@@ -60,9 +60,9 @@ class ApiHandler(AbstractLambda):
             print(response)
 
         # todo implement business logic
-        return 200
-        # except:
-            # print("error")
+        
+        return {"statusCode": 201,"event": item }
+        
     
 
 HANDLER = ApiHandler()
