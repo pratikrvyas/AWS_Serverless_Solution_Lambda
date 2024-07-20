@@ -25,7 +25,7 @@ class ApiHandler(AbstractLambda):
 
         dynamodb = boto3.resource('dynamodb')
         # table = dynamodb.Table('arn:aws:dynamodb:eu-central-1:905418349556:table/cmtr-1bb19304-Events')
-        table = dynamodb.Table('cmtr-1bb19304-Events')
+        table = dynamodb.Table('cmtr-1bb19304-Events-test')
 
         print("2")
 
