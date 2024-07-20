@@ -21,10 +21,23 @@ class SnsHandler(AbstractLambda):
         Explain incoming event here
         """
         print("SNS Message")
-        
-        # Log the message content
-        logger.info("SNS message processed successfully!")
-        _LOG.info("SNS message processed successfully!")
+        # Loop through each record in the event
+        for record in event['Records']:
+            # Extract the SNS message
+            sns_message = record['Sns']['Message']
+            
+            # If the message is a JSON string, parse it
+            try:
+                message = json.loads(sns_message)
+            except json.JSONDecodeError:
+                message = sns_message  # If it's not JSON, keep it as is
+            
+            # Process the message (for example, print it)
+            print("Processed message:", message)
+            
+            # Log the message content
+            logger.info(message)
+            _LOG.info(message)
     
         
         return {'statusCode': 200,'body': json.dumps('SNS message processed successfully!')}
