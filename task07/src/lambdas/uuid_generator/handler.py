@@ -33,9 +33,9 @@ class UuidGenerator(AbstractLambda):
         s3 = boto3.resource('s3')
         bucket = s3.Bucket(bucket_name)
         total_objects = sum(1 for _ in bucket.objects.all())
-        print(">>s3 object count : "  + total_objects)
+        print(">>s3 object count : "  + str(total_objects))
 
-        if total_objects >= 11 :
+        if int(total_objects) >= 11 :
             return 200
         else:
           
