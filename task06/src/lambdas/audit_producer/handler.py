@@ -50,27 +50,6 @@ class AuditProducer(AbstractLambda):
 def handle_insert(record,audit_table):
     print("3.1")
     new_image = record['dynamodb']['NewImage']
-    # print(new_image)
-    # print("3.2")
-    # entry={}
-    # print("3.3")
-    # for key, value in new_image.items():
-    #     print(key)
-    #     print(value)
-    #     entry["key"] = key
-    #     entry["value"] = value
-
-    # print(entry) 
-    # print(entry.get('key'))  
-    # print(entry.get('value'))  
-
-    # item = {
-    #         'id': item_id,
-    #         'principalId': int(event['principalId']),
-    #         'createdAt': created_at,
-    #         'body':  dict(map(lambda item: (item[0], item[1]), content.items()))
-            
-    #     }
 
     for key, value in new_image.items():
         print(key)
