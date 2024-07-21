@@ -108,8 +108,8 @@ def create_audit_entry(item_key, new_value, old_value):
         'itemKey': item_key,
         'modificationTime': timestamp,
         'updatedAttribute': 'value',
-        'oldValue': old_value['N'],
-        'newValue': new_value['N']
+        'oldValue': int(old_value['N']),
+        'newValue': int(new_value['N'])
     }
     return audit_entry
 
