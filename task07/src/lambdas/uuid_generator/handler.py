@@ -67,8 +67,8 @@ class UuidGenerator(AbstractLambda):
         # print("1")
         # Prepare the content to be stored in the S3 bucket
         content = {
-            "ids": random_uuids,
-            "execution_time": execution_time
+            "ids": random_uuids
+            # "execution_time": execution_time
         }
         
         # Convert content to JSON
