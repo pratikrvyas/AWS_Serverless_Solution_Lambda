@@ -29,50 +29,59 @@ class UuidGenerator(AbstractLambda):
         if FLAG_TEST:
             bucket_name=bucket_name+"-test"
 
+        
+        s3 = boto3.resource('s3')
+        bucket = s3.Bucket(bucket_name)
+        total_objects = sum(1 for _ in bucket.objects.all())
+        print(">>s3 object count : "  + total_objects)
 
-        # Generate 10 random UUIDs
-        random_uuids = [str(uuid.uuid4()) for _ in range(10)]
+        if total_objects >= 11 :
+            return 200
+        else:
+          
+            # Generate 10 random UUIDs
+            random_uuids = [str(uuid.uuid4()) for _ in range(10)]
+            
+            # Get the current execution start time
+            execution_time = datetime.utcnow().strftime('%Y%m%dT%H%M%S')
+            
+            
+            # Create a file name using the execution time
+            file_name = f"{datetime.utcnow()}.json"
+            print(">>file_name : "+file_name)
+            # print("1")
+            # Prepare the content to be stored in the S3 bucket
+            content = {
+                "uuids": random_uuids,
+                "execution_time": execution_time
+            }
+            
+            # Convert content to JSON
+            json_content = json.dumps(content)
+            
+            # print("2")
+            # print(bucket_name)
+            # print(file_name)
+            # print(json_content)
+            # print("3")
         
-        # Get the current execution start time
-        execution_time = datetime.utcnow().strftime('%Y%m%dT%H%M%S')
-        
-        
-        # Create a file name using the execution time
-        file_name = f"{datetime.utcnow()}.json"
-        
-        print("1")
-        # Prepare the content to be stored in the S3 bucket
-        content = {
-            "uuids": random_uuids,
-            "execution_time": execution_time
-        }
-        
-        # Convert content to JSON
-        json_content = json.dumps(content)
-        
-        print("2")
-        print(bucket_name)
-        print(file_name)
-        print(json_content)
-        print("3")
-    
-        try:
-             # Upload the JSON file to S3
-            s3_client.put_object(
-                Bucket=bucket_name,
-                Key=file_name,
-                Body=json_content,
-                ContentType='application/json'
-            )
-        except Exception as e:
-            print(e)
-        
+            try:
+                # Upload the JSON file to S3
+                s3_client.put_object(
+                    Bucket=bucket_name,
+                    Key=file_name,
+                    Body=json_content,
+                    ContentType='application/json'
+                )
+            except Exception as e:
+                print(e)
+            
 
 
-        print("4")
+            # print("4")
 
-        # todo implement business logic
-        return 200
+            # todo implement business logic
+            return 200
     
 
 HANDLER = UuidGenerator()
