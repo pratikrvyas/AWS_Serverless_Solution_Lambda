@@ -35,64 +35,64 @@ class UuidGenerator(AbstractLambda):
         total_objects = sum(1 for _ in bucket.objects.all())
         print(total_objects)
 
-        if int(total_objects) >= 11 :
-            return 200
-        else:
+        # if int(total_objects) >= 11 :
+        #     return 200
+        # else:
           
-            # Generate 10 random UUIDs
-            random_uuids = [str(uuid.uuid4()) for _ in range(10)]
-            
-            # # Get the current execution start time
-            execution_time = datetime.utcnow().strftime('%Y%m%dT%H%M%S')
-            
-            
-            # # Create a file name using the execution time
-            # # file_name = f"{datetime.utcnow()}.json"
-
-            
-            # dt = datetime.utcnow()
-            # # Format the datetime object to the desired ISO 8601 formats
-            # iso_format_with_z = dt.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"  # For '2024-01-01T00:00:00.000Z'
-            # iso_format_with_microseconds = dt.strftime("%Y-%m-%dT%H:%M:%S.%f")  # For '2024-01-01T00:00:00.000000'
-            # # iso_format_with_z = dt.strftime("%Y-%m-%dT%H:%M") + ":00.000Z"  
-            # # iso_format_with_microseconds = dt.strftime("%Y-%m-%dT%H:%M") + ":00.000000"  
-            # # Combine the two formats with a '|'
-            # file_name = f"{iso_format_with_z}|{iso_format_with_microseconds}"
-            # print(">>file_name : "+file_name)
-
-            file_name=datetime.utcnow().isoformat()
-
-            print(file_name)
-
-            # print("1")
-            # Prepare the content to be stored in the S3 bucket
-            content = {
-                "ids": random_uuids,
-                "execution_time": execution_time
-            }
-            
-            # Convert content to JSON
-            json_content = json.dumps(content)
-            
-            
+        # Generate 10 random UUIDs
+        random_uuids = [str(uuid.uuid4()) for _ in range(10)]
         
-            try:
-                # Upload the JSON file to S3
-                s3_client.put_object(
-                    Bucket=bucket_name,
-                    Key=file_name,
-                    Body=json_content,
-                    ContentType='application/json'
-                )
-            except Exception as e:
-                print(e)
-            
+        # # Get the current execution start time
+        execution_time = datetime.utcnow().strftime('%Y%m%dT%H%M%S')
+        
+        
+        # # Create a file name using the execution time
+        # # file_name = f"{datetime.utcnow()}.json"
+
+        
+        # dt = datetime.utcnow()
+        # # Format the datetime object to the desired ISO 8601 formats
+        # iso_format_with_z = dt.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"  # For '2024-01-01T00:00:00.000Z'
+        # iso_format_with_microseconds = dt.strftime("%Y-%m-%dT%H:%M:%S.%f")  # For '2024-01-01T00:00:00.000000'
+        # # iso_format_with_z = dt.strftime("%Y-%m-%dT%H:%M") + ":00.000Z"  
+        # # iso_format_with_microseconds = dt.strftime("%Y-%m-%dT%H:%M") + ":00.000000"  
+        # # Combine the two formats with a '|'
+        # file_name = f"{iso_format_with_z}|{iso_format_with_microseconds}"
+        # print(">>file_name : "+file_name)
+
+        file_name=datetime.utcnow().isoformat()
+
+        print(file_name)
+
+        # print("1")
+        # Prepare the content to be stored in the S3 bucket
+        content = {
+            "ids": random_uuids,
+            "execution_time": execution_time
+        }
+        
+        # Convert content to JSON
+        json_content = json.dumps(content)
+        
+        
+    
+        try:
+            # Upload the JSON file to S3
+            s3_client.put_object(
+                Bucket=bucket_name,
+                Key=file_name,
+                Body=json_content,
+                ContentType='application/json'
+            )
+        except Exception as e:
+            print(e)
+        
 
 
-            # print("4")
+        # print("4")
 
-            # todo implement business logic
-            return 200
+        # todo implement business logic
+        return 200
     
 
 HANDLER = UuidGenerator()
