@@ -36,8 +36,9 @@ class UuidGenerator(AbstractLambda):
         # Get the current execution start time
         execution_time = datetime.utcnow().strftime('%Y%m%dT%H%M%S')
         
+        
         # Create a file name using the execution time
-        file_name = f"uuids_{execution_time}.json"
+        file_name = f"{datetime.utcnow()}.json"
         
         print("1")
         # Prepare the content to be stored in the S3 bucket
