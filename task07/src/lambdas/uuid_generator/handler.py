@@ -33,7 +33,7 @@ class UuidGenerator(AbstractLambda):
         s3 = boto3.resource('s3')
         bucket = s3.Bucket(bucket_name)
         total_objects = sum(1 for _ in bucket.objects.all())
-        # print(">>s3 object count : "  + str(total_objects))
+        print(total_objects)
 
         if int(total_objects) >= 11 :
             return 200
@@ -47,8 +47,16 @@ class UuidGenerator(AbstractLambda):
             
             
             # Create a file name using the execution time
-            file_name = f"{datetime.utcnow()}.json"
+            # file_name = f"{datetime.utcnow()}.json"
+            dt = datetime.utcnow()
+            # Format the datetime object to the desired ISO 8601 formats
+            iso_format_with_z = dt.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"  # For '2024-01-01T00:00:00.000Z'
+            iso_format_with_microseconds = dt.strftime("%Y-%m-%dT%H:%M:%S.%f")  # For '2024-01-01T00:00:00.000000'
+
+            # Combine the two formats with a '|'
+            file_name = f"{iso_format_with_z}|{iso_format_with_microseconds}"
             print(">>file_name : "+file_name)
+
             # print("1")
             # Prepare the content to be stored in the S3 bucket
             content = {
