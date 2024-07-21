@@ -75,7 +75,7 @@ def handle_insert(configuration_key,record,audit_table):
         'id': str(uuid.uuid4()),
         'itemKey': configuration_key,
         'modificationTime': datetime.utcnow().isoformat(),
-        "newValue": {"key": key, "value": value}
+        "newValue": {"key": key, "value": int(value)}
     }
     save_audit_entry(audit_entry,audit_table)
     
