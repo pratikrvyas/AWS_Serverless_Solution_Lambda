@@ -24,11 +24,21 @@ class AuditProducer(AbstractLambda):
         # Initialize DynamoDB resource
         dynamodb = boto3.resource('dynamodb')
 
+        FLAG_TEST=True
+
         # Table names can be set in environment variables for flexibility
-        CONFIG_TABLE_NAME = "cmtr-1bb19304-Configuration-test"
-        AUDIT_TABLE_NAME = "cmtr-1bb19304-Audit-test"
+        CONFIG_TABLE_NAME = "cmtr-1bb19304-Configuration"
+        AUDIT_TABLE_NAME = "cmtr-1bb19304-Audit"
+
+        if FLAG_TEST:
+            CONFIG_TABLE_NAME = CONFIG_TABLE_NAME + "-test"
+            AUDIT_TABLE_NAME = AUDIT_TABLE_NAME + "-test"
+
 
         print("1")
+        print(FLAG_TEST)
+        print(CONFIG_TABLE_NAME)
+        print(AUDIT_TABLE_NAME)
 
         # Reference to the DynamoDB tables
         config_table = dynamodb.Table(CONFIG_TABLE_NAME)
@@ -37,46 +47,61 @@ class AuditProducer(AbstractLambda):
         print("2")
 
         for record in event['Records']:
+            print(record)
+
+            configuration_key = record['dynamodb']['Keys']['key']['S']
+            print(configuration_key)
+             
+
             print(record['eventName'])
             if record['eventName'] == 'MODIFY':
-                handle_modify(record,audit_table)
+                handle_modify(configuration_key,record,audit_table)
             elif record['eventName'] == 'INSERT':
-                handle_insert(record,audit_table)
+                handle_insert(configuration_key,record,audit_table)
 
 
         return 200
     
 
-def handle_insert(record,audit_table):
+def handle_insert(configuration_key,record,audit_table):
     print("3.1")
     new_image = record['dynamodb']['NewImage']
+    print(new_image)
 
-    for key, value in new_image.items():
-        print(key)
-        print(value)
-        audit_entry = {
-            'id': str(uuid.uuid4()),
-            'itemKey': key,
-            'modificationTime': datetime.utcnow().isoformat(),
-            "newValue": {"key": key, "value":value }
-        }
-        save_audit_entry(audit_entry,audit_table)
+    key=new_image["key"]['S']
+    value=new_image["value"]['N']
+
+    audit_entry = {
+        'id': str(uuid.uuid4()),
+        'itemKey': configuration_key,
+        'modificationTime': datetime.utcnow().isoformat(),
+        "newValue": {"key": key, "value": value}
+    }
+    save_audit_entry(audit_entry,audit_table)
     
 
-def handle_modify(record,audit_table):
+def handle_modify(configuration_key,record,audit_table):
     print("3")
+    print(record)
     new_image = record['dynamodb']['NewImage']
     old_image = record['dynamodb']['OldImage']
     print("4")
     for key, value in new_image.items():
         print(key)
         print(value)
+        print(new_image[key] )
+        print(old_image[key] )
+        print(new_image)
+        print(old_image)
         if key in old_image and new_image[key] != old_image[key]:
-            audit_entry = create_audit_entry(key, new_image[key], old_image[key])
+            audit_entry = create_audit_entry(configuration_key, new_image[key], old_image[key])
             save_audit_entry(audit_entry,audit_table)
 
 def create_audit_entry(item_key, new_value, old_value):
     print("5")
+    print(item_key)
+    print(new_value)
+    print(old_value)
     timestamp = datetime.utcnow().isoformat()
     audit_entry = {
         'id': str(uuid.uuid4()),
