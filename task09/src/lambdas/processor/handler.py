@@ -44,20 +44,45 @@ class Processor(AbstractLambda):
         print("--3")
 
         weather_data = response.json()
-        weather_data_decimal=  convert_to_decimal(weather_data)
+        # weather_data_decimal=  convert_to_decimal(weather_data)
+
+        # Transform the data into the desired format
+        output_data = {
+            "id": str(uuid.uuid4()),  # Generate a new UUID
+            "forecast": {
+                "elevation": convert_to_decimal(weather_data["forecast"]["elevation"]),
+                "generationtime_ms": convert_to_decimal(weather_data["forecast"]["generationtime_ms"]),
+                "latitude": convert_to_decimal(weather_data["forecast"]["latitude"]),
+                "longitude": convert_to_decimal(weather_data["forecast"]["longitude"]),
+                "timezone": weather_data["forecast"]["timezone"],
+                "timezone_abbreviation": weather_data["forecast"]["timezone_abbreviation"],
+                "utc_offset_seconds": convert_to_decimal(weather_data["forecast"]["utc_offset_seconds"]),
+                "hourly": {
+                    "temperature_2m": convert_to_decimal(weather_data["forecast"]["hourly"]["temperature_2m"]),
+                    "time": weather_data["forecast"]["hourly"]["time"]
+                },
+                "hourly_units": {
+                    "temperature_2m": weather_data["forecast"]["hourly_units"]["temperature_2m"],
+                    "time": weather_data["forecast"]["hourly_units"]["time"]
+                }
+            }
+        }
+
+        # Print the output data
+        print(json.dumps(output_data, indent=4, default=str))
 
         print("--4")
 
         # Create a new item in the DynamoDB table
         item = {
             'id': str(uuid.uuid4()),
-            'forecast': weather_data_decimal
+            'forecast': output_data
         }
 
         
         print("--5")
         try:
-            # print(item)
+            print(item)
             print("--6")
             table.put_item(Item=item)
         except Exception as e:
