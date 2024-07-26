@@ -50,7 +50,7 @@ class Processor(AbstractLambda):
 
         # Create a new item in the DynamoDB table
         item = {
-            'Id': str(uuid.uuid4()),
+            'id': str(uuid.uuid4()),
             'forecast': weather_data_decimal
         }
 

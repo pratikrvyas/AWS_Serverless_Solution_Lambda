@@ -1,6 +1,6 @@
 {
   "processor-role": {
-    "predefined_policies": ["AmazonDynamoDBFullAccess","AmazonDynamoDBReadOnlyAccess","AWSLambdaDynamoDBExecutionRole","AWSLambdaInvocation-DynamoDB"],
+    "predefined_policies": ["AmazonDynamoDBFullAccess","AmazonDynamoDBReadOnlyAccess","AWSLambdaDynamoDBExecutionRole","AWSLambdaInvocation-DynamoDB","AWSXrayFullAccess","AWSXRayDaemonWriteAccess","AWSXrayReadOnlyAccess"],
     "principal_service": "lambda",
     "custom_policies": [
       "lambda-basic-execution"
