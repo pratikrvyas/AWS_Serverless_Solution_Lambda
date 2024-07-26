@@ -50,15 +50,15 @@ class Processor(AbstractLambda):
         output_data = {
             "id": str(uuid.uuid4()),  # Generate a new UUID
             "forecast": {
-                "elevation": convert_to_decimal(weather_data["forecast"]["elevation"]),
-                "generationtime_ms": convert_to_decimal(weather_data["forecast"]["generationtime_ms"]),
-                "latitude": convert_to_decimal(weather_data["forecast"]["latitude"]),
-                "longitude": convert_to_decimal(weather_data["forecast"]["longitude"]),
+                "elevation": Decimal(weather_data["forecast"]["elevation"]),
+                "generationtime_ms": Decimal(weather_data["forecast"]["generationtime_ms"]),
+                "latitude": Decimal(weather_data["forecast"]["latitude"]),
+                "longitude": Decimal(weather_data["forecast"]["longitude"]),
                 "timezone": weather_data["forecast"]["timezone"],
                 "timezone_abbreviation": weather_data["forecast"]["timezone_abbreviation"],
-                "utc_offset_seconds": convert_to_decimal(weather_data["forecast"]["utc_offset_seconds"]),
+                "utc_offset_seconds": Decimal(weather_data["forecast"]["utc_offset_seconds"]),
                 "hourly": {
-                    "temperature_2m": convert_to_decimal(weather_data["forecast"]["hourly"]["temperature_2m"]),
+                    "temperature_2m": Decimal(weather_data["forecast"]["hourly"]["temperature_2m"]),
                     "time": weather_data["forecast"]["hourly"]["time"]
                 },
                 "hourly_units": {
@@ -69,7 +69,7 @@ class Processor(AbstractLambda):
         }
 
         # Print the output data
-        print(json.dumps(output_data, indent=4, default=str))
+        print(output_data)
 
         print("--4")
 
