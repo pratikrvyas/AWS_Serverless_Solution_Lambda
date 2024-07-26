@@ -34,7 +34,7 @@ class Processor(AbstractLambda):
         print("--1")
 
         dynamodb = boto3.resource('dynamodb')
-        table = dynamodb.Table('cmtr-1bb19304-Weather')
+        table = dynamodb.Table('cmtr-1bb19304-Weather-test')
 
         print("--2")
 
