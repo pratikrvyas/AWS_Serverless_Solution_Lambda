@@ -41,32 +41,36 @@ class Processor(AbstractLambda):
         # Fetch weather data from Open-Meteo API
         response = requests.get("https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m")
 
-        print("--3")
+        
 
         weather_data = response.json()
+        print("--3")
+        print(weather_data)
+        print("--4")
         # weather_data_decimal=  convert_to_decimal(weather_data)
 
         # Transform the data into the desired format
         output_data = {
             "id": str(uuid.uuid4()),  # Generate a new UUID
             "forecast": {
-                "elevation": Decimal(weather_data["forecast"]["elevation"]),
-                "generationtime_ms": Decimal(weather_data["forecast"]["generationtime_ms"]),
-                "latitude": Decimal(weather_data["forecast"]["latitude"]),
-                "longitude": Decimal(weather_data["forecast"]["longitude"]),
-                "timezone": weather_data["forecast"]["timezone"],
-                "timezone_abbreviation": weather_data["forecast"]["timezone_abbreviation"],
-                "utc_offset_seconds": Decimal(weather_data["forecast"]["utc_offset_seconds"]),
+                "elevation": convert_to_decimal(weather_data["elevation"]),
+                "generationtime_ms": Decimal(weather_data["generationtime_ms"]),
+                "latitude": convert_to_decimal(weather_data["latitude"]),
+                "longitude": convert_to_decimal(weather_data["longitude"]),
+                "timezone": weather_data["timezone"],
+                "timezone_abbreviation": weather_data["timezone_abbreviation"],
+                "utc_offset_seconds": convert_to_decimal(weather_data["utc_offset_seconds"]),
                 "hourly": {
-                    "temperature_2m": Decimal(weather_data["forecast"]["hourly"]["temperature_2m"]),
-                    "time": weather_data["forecast"]["hourly"]["time"]
+                    "temperature_2m": convert_to_decimal(weather_data["hourly"]["temperature_2m"]),
+                    "time": weather_data["hourly"]["time"]
                 },
                 "hourly_units": {
-                    "temperature_2m": weather_data["forecast"]["hourly_units"]["temperature_2m"],
-                    "time": weather_data["forecast"]["hourly_units"]["time"]
+                    "temperature_2m": weather_data["hourly_units"]["temperature_2m"],
+                    "time": weather_data["hourly_units"]["time"]
                 }
             }
         }
+
 
         # Print the output data
         print(output_data)
@@ -74,22 +78,22 @@ class Processor(AbstractLambda):
         print("--4")
 
         # Create a new item in the DynamoDB table
-        item = {
-            'id': str(uuid.uuid4()),
-            'forecast': output_data
-        }
+        # item = {
+        #     'id': str(uuid.uuid4()),
+        #     'forecast': output_data
+        # }
 
         
         print("--5")
         try:
-            print(item)
+           
             print("--6")
-            table.put_item(Item=item)
+            table.put_item(Item=output_data)
         except Exception as e:
             print("--7")
             print(e)
         
-        return item
+        return output_data
     
 
 HANDLER = Processor()
