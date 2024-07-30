@@ -95,7 +95,7 @@
           "enable_proxy":true
         }
       },
-      "/table": {
+      "/tables": {
         "enable_cors": false,
         "POST": {
           "authorization_type": "authorizer",
@@ -125,7 +125,7 @@
           "enable_proxy":true
         }
       },
-      "/reservation": {
+      "/reservations": {
         "enable_cors": false,
         "POST": {
           "authorization_type": "authorizer",

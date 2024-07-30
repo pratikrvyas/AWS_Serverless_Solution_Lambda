@@ -76,7 +76,7 @@ class ApiHandler(AbstractLambda):
             elif route == '/signin':
                 print("---2")
                 return signin(event,USER_POOL_ID,CLIENT_ID)
-            elif route == '/table':
+            elif route == '/tables':
                 print("---3")
                 if event['httpMethod'] == 'POST':
                     print("---3")
@@ -86,7 +86,7 @@ class ApiHandler(AbstractLambda):
                 if event['httpMethod'] == 'GET':
                     print("---6")
                     return get_tables(event)
-            elif route == '/reservation':
+            elif route == '/reservations':
                 if event['httpMethod'] == 'POST':
                     print("---7")
                     return create_reservation(event)
