@@ -83,17 +83,14 @@ class ApiHandler(AbstractLambda):
                 if event['httpMethod'] == 'POST':
                     print("---3")
                     return create_table(event,tables_table)
-            elif route.startswith('/tables'):
-                print("---6")
-                if event['httpMethod'] == 'GET':
+                elif  event['httpMethod'] == 'GET':
                     print("---6")
                     return get_tables(event,tables_table)
             elif route == '/reservations':
                 if event['httpMethod'] == 'POST':
                     print("---7")
                     return create_reservation(event,reservations_table)
-            elif route == '/reservations':
-                if event['httpMethod'] == 'GET':
+                elif  event['httpMethod'] == 'GET':
                     print("---8")
                     return get_reservations(event,reservations_table)
             
