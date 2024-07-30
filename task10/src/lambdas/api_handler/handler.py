@@ -77,7 +77,7 @@ class ApiHandler(AbstractLambda):
                 return signup(event,USER_POOL_ID,cognito_client)
             elif route == '/signin':
                 print("---2")
-                return signin(event,USER_POOL_ID,CLIENT_ID)
+                return signin(event,USER_POOL_ID,CLIENT_ID,cognito_client)
             elif route == '/tables':
                 print("---3")
                 if event['httpMethod'] == 'POST':
@@ -159,7 +159,7 @@ def signup(event,USER_POOL_ID,cognito_client):
         print(e)
         # return {'statusCode': 400, 'body': json.dumps(str(e))}
 
-def signin(event,USER_POOL_ID,CLIENT_ID):
+def signin(event,USER_POOL_ID,CLIENT_ID,cognito_client):
 
     print("---2-signin-start")
     body = json.loads(event['body'])
