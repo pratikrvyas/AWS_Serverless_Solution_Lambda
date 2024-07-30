@@ -261,14 +261,15 @@ def create_reservation(event,reservations_table):
     from boto3.dynamodb.conditions import Key
     # Check for overlapping reservations
     overlapping_reservations = reservations_table.query(
-        KeyConditionExpression=Key('id').eq(reservation_id) & 
-        Key('tableNumber').eq(body['tableNumber']) & 
-        Key('date').eq(body['date']),
-        FilterExpression=(
-            (Key('slotTimeStart').lt(body['slotTimeEnd'])) & 
-            (Key('slotTimeEnd').gt(body['slotTimeStart']))
-        )
-    )
+    KeyConditionExpression=Key('tableNumber').eq(body['tableNumber']) & 
+                            Key('date').eq(body['date']),
+    FilterExpression=(
+        (Key('slotTimeStart').lt(body['slotTimeEnd'])) & 
+        (Key('slotTimeEnd').gt(body['slotTimeStart']))
+    ))
+
+
+    
     
     if overlapping_reservations['Items']:
         return {
