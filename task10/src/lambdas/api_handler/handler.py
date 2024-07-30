@@ -242,6 +242,23 @@ def create_reservation(event,reservations_table):
         'slotTimeEnd': body['slotTimeEnd']
     }
     print(item)
+
+    # Check for overlapping reservations
+    from boto3.dynamodb.conditions import Key
+    overlapping_reservations = reservations_table.query(
+        KeyConditionExpression=Key('tableNumber').eq(body['tableNumber']) & 
+        Key('date').eq(body['date']),
+        FilterExpression=(
+            (Key('slotTimeStart').lt(body['slotTimeEnd'])) & 
+            (Key('slotTimeEnd').gt(body['slotTimeStart']))
+        )
+    )
+    
+    if overlapping_reservations['Items']:
+        return {
+            'statusCode': 400,
+            'body': json.dumps({'error': 'Time slot overlaps with an existing reservation.'})
+        }
     
     reservations_table.put_item(Item=item)
     print("---6-create_reservation-end")
