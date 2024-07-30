@@ -209,7 +209,7 @@ def create_table(event,tables_table):
     print("---4-create_table--start")
     # Create a new table entry
     item = {
-        'id': table_id,
+        'id': str(table_id),
         'number': body['number'],
         'places': body['places'],
         'isVip': body['isVip'],
