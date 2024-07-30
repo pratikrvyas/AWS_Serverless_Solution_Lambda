@@ -38,9 +38,9 @@ class ApiHandler(AbstractLambda):
             FLG_TEST=True
 
             if FLG_TEST:
-                tables_table=tables_table+"-test"
-                reservations_table=reservations_table+"-test"
-                USER_POOL_NAME=USER_POOL_NAME+"-test"
+                 tables_table = dynamodb.Table('cmtr-1bb19304-Tables-test')
+                 reservations_table = dynamodb.Table('cmtr-1bb19304-Reservations-test')
+                 USER_POOL_NAME="cmtr-1bb19304-simple-booking-userpool-test"
 
 
 
