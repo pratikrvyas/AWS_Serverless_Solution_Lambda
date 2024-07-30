@@ -12,10 +12,9 @@ from botocore.exceptions import ClientError
 
 cognito_client = boto3.client('cognito-idp')
 dynamodb = boto3.resource('dynamodb')
+
 tables_table = dynamodb.Table('cmtr-1bb19304-Tables')
 reservations_table = dynamodb.Table('cmtr-1bb19304-Reservations')
-my_pool_name="cmtr-1bb19304-simple-booking-userpool"
-
 USER_POOL_NAME="cmtr-1bb19304-simple-booking-userpool"
 
 
@@ -34,22 +33,24 @@ class ApiHandler(AbstractLambda):
         # Initialize AWS services
         try:
             
+            FLG_TEST=True
+
+            if FLG_TEST:
+                tables_table=tables_table+"-test"
+                reservations_table=reservations_table+"-test"
+                USER_POOL_NAME=USER_POOL_NAME+"-test"
+
+
 
             print("----start-----")
             print("Received event:", json.dumps(event))
 
-            
             route=event['path']
-            print(route)
-
             cognito_client = boto3.client('cognito-idp')
             response = cognito_client.list_user_pools(MaxResults=60) 
-            print(response)
 
             # booking-userpool: simple-booking-userpool
 
-            
-            
 
             for pool in response['UserPools']:
                 # print(f"User Pool ID: {pool['Id']}, Name: {pool['Name']}")
@@ -58,29 +59,15 @@ class ApiHandler(AbstractLambda):
                
 
             print("--mypool--")
-            print(my_pool)
             print(my_pool['Name']) 
             print(my_pool['Id'])
+
             USER_POOL_ID = str(my_pool['Id'])
             print(USER_POOL_ID)
-            
-
-            
-
-            # cognito_client = boto3.client('cognito-idp')
-
-            # response = cognito_client.describe_user_pool(UserPoolId=USER_POOL_ID )
-            # # client_id = response['UserPool']['AppClientsToAttributeMapping'].keys()[0]
-            # print("---client")
-            # print(response)
-
-            # # app_clients = response['UserPool'].get('AppClients', [])
-            # app_clients = response['UserPool']["client-app"]
-            # print(app_clients)
-
-            CLIENT_ID="751v63k1sklgv56cc1vlcjjhr7"
-
-
+            response = cognito_client.list_user_pool_clients( UserPoolId=USER_POOL_ID)
+            CLIENT_ID = response['UserPoolClients'][0]['ClientId']
+            print("---client id")
+            print(CLIENT_ID)
 
 
             if route == '/signup':
@@ -110,18 +97,15 @@ class ApiHandler(AbstractLambda):
             
            
             print("---10---")
-            return {'statusCode': 404, 'body': json.dumps('Not Found')}
-
-
-     
 
             return 200
         except Exception as e:
             print("----error")    
             print(e)
+            return 401
 
 
-        return 200
+       
 
 
 
