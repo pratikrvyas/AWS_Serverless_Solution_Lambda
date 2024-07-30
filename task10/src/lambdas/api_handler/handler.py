@@ -220,10 +220,22 @@ def create_table(event,tables_table):
 
 def get_table(event, table_id,tables_table):
     response = tables_table.get_item(Key={'id': table_id})
+
+    print("---5-get_table--start")
+
+  
     if 'Item' in response:
-        return {'statusCode': 200, 'body': json.dumps(response['Item'])}
-    print("---5-get_table")
-    return {'statusCode': 400, 'body': json.dumps('Table not found')}
+         
+         item = {
+             'id': response['Item']["id"],
+             'number': response['Item']['number'],
+             'isVip': response['Item']['isVip'],
+             'minOrder': response['Item']['minOrder']
+             }
+         print("---5-get_table")
+         return {'statusCode': 200, 'body': json.dumps(item)}
+    else:
+        return {'statusCode': 400, 'body': json.dumps('Table not found')}
 
 def create_reservation(event,reservations_table):
     body = json.loads(event['body'])
@@ -249,10 +261,13 @@ def create_reservation(event,reservations_table):
     from boto3.dynamodb.conditions import Key
     # Check for overlapping reservations
     overlapping_reservations = reservations_table.query(
-        KeyConditionExpression=Key('tableNumber').eq(body['tableNumber']),
-        FilterExpression=Key('date').eq(body['date']) & 
-                        (Key('slotTimeStart').lt(body['slotTimeEnd'])) & 
-                        (Key('slotTimeEnd').gt(body['slotTimeStart']))
+        KeyConditionExpression=Key('id').eq(reservation_id) & 
+        Key('tableNumber').eq(body['tableNumber']) & 
+        Key('date').eq(body['date']),
+        FilterExpression=(
+            (Key('slotTimeStart').lt(body['slotTimeEnd'])) & 
+            (Key('slotTimeEnd').gt(body['slotTimeStart']))
+        )
     )
     
     if overlapping_reservations['Items']:
