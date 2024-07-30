@@ -230,6 +230,8 @@ def create_reservation(event,reservations_table):
     reservation_id = str(uuid.uuid4())
     
     print("---start 6-create_reservation-")
+   
+    
     # Create a new reservation entry
     item = {
         'id': reservation_id,
@@ -245,13 +247,12 @@ def create_reservation(event,reservations_table):
 
     # Check for overlapping reservations
     from boto3.dynamodb.conditions import Key
+    # Check for overlapping reservations
     overlapping_reservations = reservations_table.query(
-        KeyConditionExpression=Key('tableNumber').eq(body['tableNumber']) & 
-        Key('date').eq(body['date']),
-        FilterExpression=(
-            (Key('slotTimeStart').lt(body['slotTimeEnd'])) & 
-            (Key('slotTimeEnd').gt(body['slotTimeStart']))
-        )
+        KeyConditionExpression=Key('tableNumber').eq(body['tableNumber']),
+        FilterExpression=Key('date').eq(body['date']) & 
+                        (Key('slotTimeStart').lt(body['slotTimeEnd'])) & 
+                        (Key('slotTimeEnd').gt(body['slotTimeStart']))
     )
     
     if overlapping_reservations['Items']:
