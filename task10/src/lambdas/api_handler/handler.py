@@ -10,12 +10,7 @@ import uuid
 import re
 from botocore.exceptions import ClientError
 
-cognito_client = boto3.client('cognito-idp')
-dynamodb = boto3.resource('dynamodb')
 
-tables_table = dynamodb.Table('cmtr-1bb19304-Tables')
-reservations_table = dynamodb.Table('cmtr-1bb19304-Reservations')
-USER_POOL_NAME="cmtr-1bb19304-simple-booking-userpool"
 
 
 
@@ -32,6 +27,13 @@ class ApiHandler(AbstractLambda):
 
         # Initialize AWS services
         try:
+
+            cognito_client = boto3.client('cognito-idp')
+            dynamodb = boto3.resource('dynamodb')
+
+            tables_table = dynamodb.Table('cmtr-1bb19304-Tables')
+            reservations_table = dynamodb.Table('cmtr-1bb19304-Reservations')
+            USER_POOL_NAME="cmtr-1bb19304-simple-booking-userpool"
             
             FLG_TEST=True
 
@@ -72,7 +74,7 @@ class ApiHandler(AbstractLambda):
 
             if route == '/signup':
                 print("---1")
-                return signup(event,USER_POOL_ID)
+                return signup(event,USER_POOL_ID,cognito_client)
             elif route == '/signin':
                 print("---2")
                 return signin(event,USER_POOL_ID,CLIENT_ID)
@@ -80,20 +82,20 @@ class ApiHandler(AbstractLambda):
                 print("---3")
                 if event['httpMethod'] == 'POST':
                     print("---3")
-                    return create_table(event)
+                    return create_table(event,tables_table)
             elif route.startswith('/tables'):
                 print("---6")
                 if event['httpMethod'] == 'GET':
                     print("---6")
-                    return get_tables(event)
+                    return get_tables(event,tables_table)
             elif route == '/reservations':
                 if event['httpMethod'] == 'POST':
                     print("---7")
-                    return create_reservation(event)
+                    return create_reservation(event,reservations_table)
             elif route == '/reservations':
                 if event['httpMethod'] == 'GET':
                     print("---8")
-                    return get_reservations(event)
+                    return get_reservations(event,reservations_table)
             
            
             print("---10---")
@@ -119,7 +121,7 @@ def lambda_handler(event, context):
     return HANDLER.lambda_handler(event=event, context=context)
 
 
-def signup(event,USER_POOL_ID):
+def signup(event,USER_POOL_ID,cognito_client):
 
     print("---1-start")
     body = json.loads(event['body'])
@@ -189,7 +191,7 @@ def convert_decimal_to_float(obj):
         return float(obj)
     raise TypeError("Type not serializable")
 
-def get_tables(event):
+def get_tables(event,tables_table):
     print("---3-get_tables--start")
     # Fetch tables from DynamoDB
     response = tables_table.scan()
@@ -201,7 +203,7 @@ def get_tables(event):
     return {'statusCode': 200, 'body': json.dumps({'tables': response['Items'] }, default=convert_decimal_to_float)}
     # return {'statusCode': 200, 'body': json.dumps({'tables': item})}
 
-def create_table(event):
+def create_table(event,tables_table):
     body = json.loads(event['body'])
     table_id = str(uuid.uuid4())
     print("---4-create_table--start")
@@ -219,14 +221,14 @@ def create_table(event):
     return {'statusCode': 200, 'body': json.dumps({'id': table_id})}
 
 
-def get_table(event, table_id):
+def get_table(event, table_id,tables_table):
     response = tables_table.get_item(Key={'id': table_id})
     if 'Item' in response:
         return {'statusCode': 200, 'body': json.dumps(response['Item'])}
     print("---5-get_table")
     return {'statusCode': 400, 'body': json.dumps('Table not found')}
 
-def create_reservation(event):
+def create_reservation(event,reservations_table):
     body = json.loads(event['body'])
     reservation_id = str(uuid.uuid4())
     
@@ -248,7 +250,7 @@ def create_reservation(event):
     print("---6-create_reservation-end")
     return {'statusCode': 200, 'body': json.dumps({'reservationId': reservation_id})}
 
-def get_reservations(event):
+def get_reservations(event,reservations_table):
     # Fetch reservations from DynamoDB
     response = reservations_table.scan()
     print("---7-get_reservations")
