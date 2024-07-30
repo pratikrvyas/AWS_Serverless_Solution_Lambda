@@ -11,7 +11,7 @@
   "dependencies": [],
   "event_sources": [],
   "env_variables": {
-    "userpool_name":"${booking-userpool}"
+    "userpool_name":"simple-booking-userpool"
   },
   "publish_version": false,
   "url_config": {},
