@@ -205,7 +205,7 @@ def get_tables(event,tables_table):
 
 def create_table(event,tables_table):
     body = json.loads(event['body'])
-    table_id = str(uuid.uuid4())
+    table_id = body['id'] # str(uuid.uuid4())
     print("---4-create_table--start")
     # Create a new table entry
     item = {
