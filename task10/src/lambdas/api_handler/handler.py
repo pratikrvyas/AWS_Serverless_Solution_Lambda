@@ -340,15 +340,19 @@ def create_reservation(event,reservations_table,tables_table):
             print("--date conflict")
             print(itm["date"])
             print(body['date'])
-            if int(str(itm["slotTimeStart"]).replace(":","")) >= int(str(body['slotTimeStart']).replace(":","")):
-                print("--start time confflict")
-                print(itm["slotTimeStart"])
-                print(body['slotTimeStart'])
-                if int(str(itm["slotTimeEnd"]).replace(":","")) <= int(str(body['slotTimeEnd']).replace(":","")):
-                    print("--end time confflict")
-                    print(itm["slotTimeEnd"])
-                    print(body['slotTimeEnd'])
-                    return  {'statusCode': 400,'body': json.dumps({'error': 'Conflicting reservations.'})}
+            if int(itm["tableNumber"])==int(body['tableNumber']):
+                print("--table conflict")
+                print(int(itm["tableNumber"]))
+                print(int(body['tableNumber']))
+                if int(str(itm["slotTimeStart"]).replace(":","")) >= int(str(body['slotTimeStart']).replace(":","")):
+                    print("--start time confflict")
+                    print(itm["slotTimeStart"])
+                    print(body['slotTimeStart'])
+                    if int(str(itm["slotTimeEnd"]).replace(":","")) <= int(str(body['slotTimeEnd']).replace(":","")):
+                        print("--end time confflict")
+                        print(itm["slotTimeEnd"])
+                        print(body['slotTimeEnd'])
+                        return  {'statusCode': 400,'body': json.dumps({'error': 'Conflicting reservations.'})}
 
 
 
