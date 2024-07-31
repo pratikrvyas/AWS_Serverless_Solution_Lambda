@@ -338,10 +338,16 @@ def create_reservation(event,reservations_table,tables_table):
         print(str(body['date']))
         if str(itm["date"])==str(body['date']):
             print("--date conflict")
+            print(itm["date"])
+            print(body['date'])
             if int(str(itm["slotTimeStart"]).replace(":","")) >= int(str(body['slotTimeStart']).replace(":","")):
                 print("--start time confflict")
+                print(itm["slotTimeStart"])
+                print(body['slotTimeStart'])
                 if int(str(itm["slotTimeEnd"]).replace(":","")) >= int(str(body['slotTimeEnd']).replace(":","")):
                     print("--end time confflict")
+                    print(itm["slotTimeEnd"])
+                    print(body['slotTimeEnd'])
                     return  {'statusCode': 400,'body': json.dumps({'error': 'Conflicting reservations.'})}
 
 
