@@ -330,6 +330,7 @@ def create_reservation(event,reservations_table,tables_table):
 
      # Check if any items were found
     if 'Items' in response and response['Items']:
+        print("---check tables---")
         table_exists = tables_table.query(
         KeyConditionExpression=  Key('id').eq(int(body['tableNumber'])),
         Limit=1)
@@ -357,7 +358,7 @@ def create_reservation(event,reservations_table,tables_table):
     print(item)
 
     # # Check for overlapping reservations
-    from boto3.dynamodb.conditions import Key
+    # from boto3.dynamodb.conditions import Key
     # Check for overlapping reservations
     # overlapping_reservations = reservations_table.query(
     #     KeyConditionExpression=Key('id').eq(int(body['tableNumber'])),
