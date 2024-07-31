@@ -336,6 +336,7 @@ def create_reservation(event,reservations_table,tables_table):
         )
 
         print("---done--")
+        print(response)
     
         # if not table_exists['Items']:
         #     return {
