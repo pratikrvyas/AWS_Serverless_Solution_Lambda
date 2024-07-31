@@ -35,7 +35,7 @@ class ApiHandler(AbstractLambda):
             reservations_table = dynamodb.Table('cmtr-1bb19304-Reservations')
             USER_POOL_NAME="cmtr-1bb19304-simple-booking-userpool"
             
-            FLG_TEST=False
+            FLG_TEST=True
 
             if FLG_TEST:
                  tables_table = dynamodb.Table('cmtr-1bb19304-Tables-test')
@@ -252,17 +252,32 @@ def get_table_with_id(event,tables_table,table_id):
     
     # Fetch the table data from DynamoDB
     try:
+
+        # flg_is_table_exist = False
+        # response = tables_table.scan()
+        # print(response['Items'])
+        # for itm in response['Items']:
+        #     print(itm)
+        #     if itm["number"]==Decimal(table_id):
+        #          flg_is_table_exist=True
+
+        # if not flg_is_table_exist:
+        #     return  {'statusCode': 400,'body': json.dumps({'error': 'Table not found.'})}
+
+
         response = tables_table.get_item(
-            Key={'number': table_id}  
+            Key={'id': int(table_id)}  
         )
-        # response = tables_table.query(KeyConditionExpression=Key("number").eq(table_id))
+        # response = tables_table.query(KeyConditionExpression=Key("id").eq(int(table_id)))
         # response = tables_table.scan(
         #     FilterExpression=Key('number').eq(table_id),
         #     Limit=1 
         # )
+
+
         print(response)
         
-        # Check if the item was found
+        # # Check if the item was found
         if 'Item' not in response:
             return {
                 'statusCode': 400,
@@ -295,12 +310,43 @@ def create_reservation(event,reservations_table,tables_table):
 
 
      # Check if any items were found
-    print("--check table---")
-    table_id=int(body['tableNumber'])
+    # print("--check table---")
+    # table_id=int(body['tableNumber'])
+    # print(table_id)
+    # response = tables_table.query(KeyConditionExpression=Key("number").eq(table_id))
+    # print(response)
+    # print(response['Items'])
+
+    flg_is_table_exist = False
+    response = tables_table.scan()
+    table_id =int(body['tableNumber'])
     print(table_id)
-    response = tables_table.query(KeyConditionExpression=Key("number").eq(table_id))
-    print(response)
     print(response['Items'])
+    # table_item=None
+    for itm in response['Items']:
+        print(itm)
+        if itm["number"]==Decimal(table_id):
+             flg_is_table_exist=True
+            #  table_item=itm
+
+    if not flg_is_table_exist:
+        return  {'statusCode': 400,'body': json.dumps({'error': 'Table not found.'})}
+    
+    res_reserv = reservations_table.scan()
+    for itm in res_reserv['Items']:
+        print(str(itm["date"]))
+        print(str(body['date']))
+        if str(itm["date"])==str(body['date']):
+            print("--date conflict")
+            if int(str(itm["slotTimeStart"]).replace(":","")) >= int(str(body['slotTimeStart']).replace(":","")):
+                print("--start time confflict")
+                if int(str(itm["slotTimeEnd"]).replace(":","")) >= int(str(body['slotTimeEnd']).replace(":","")):
+                    print("--end time confflict")
+                    return  {'statusCode': 400,'body': json.dumps({'error': 'Conflicting reservations.'})}
+
+
+
+    
 
     print("--check table end---")
      
