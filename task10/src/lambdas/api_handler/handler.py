@@ -320,17 +320,12 @@ def create_reservation(event,reservations_table,tables_table):
     print("---start 6-create_reservation-")
 
 
-    # Check if the requested table exists
-    # table_exists = reservations_table.query(
-    #     KeyConditionExpression=Key('tableNumber').eq(table_number) & Key('id').eq(table_number),
-    #     Limit=1
-    # )
-
     response = reservations_table.scan(Limit=1)
 
      # Check if any items were found
     if 'Items' in response and response['Items']:
         print("---check tables---")
+        print(body['tableNumber'])
         table_exists = tables_table.query(
         KeyConditionExpression=  Key('id').eq(int(body['tableNumber'])),
         Limit=1)
