@@ -337,32 +337,33 @@ def create_reservation(event,reservations_table,tables_table):
         elif int(body['tableNumber']) == 2:
             id=15729       
 
-        key_condition_expression =Key('id').eq(id) &  Key('number').eq(int(body['tableNumber'])) 
-                                                    
-        response = tables_table.query(
-            KeyConditionExpression=key_condition_expression
-        )
+        if id >0:
+            key_condition_expression =Key('id').eq(id) &  Key('number').eq(int(body['tableNumber'])) 
+                                                        
+            response = tables_table.query(
+                KeyConditionExpression=key_condition_expression
+            )
 
 
-        # response = tables_table.scan(
-        #     FilterExpression=Key('number').eq(int(body['tableNumber'])),
-        #     Limit=1 
-        # )
+            # response = tables_table.scan(
+            #     FilterExpression=Key('number').eq(int(body['tableNumber'])),
+            #     Limit=1 
+            # )
 
-        print("---done--")
-        print(response)
-    
-        # if not table_exists['Items']:
-        #     return {
-        #         'statusCode': 404,
-        #         'body': json.dumps({'error': 'Table not found.'})
-        #     } 
+            print("---done--")
+            print(response)
         
-        if not 'Items' in response and response['Items']:
-            return {
-                'statusCode': 400,
-                'body': json.dumps({'error': 'Table not found.'})
-            }
+            # if not table_exists['Items']:
+            #     return {
+            #         'statusCode': 404,
+            #         'body': json.dumps({'error': 'Table not found.'})
+            #     } 
+            
+            if not 'Items' in response and response['Items']:
+                return {
+                    'statusCode': 400,
+                    'body': json.dumps({'error': 'Table not found.'})
+                }
         
    
     
