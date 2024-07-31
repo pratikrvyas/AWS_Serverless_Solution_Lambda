@@ -329,11 +329,17 @@ def create_reservation(event,reservations_table,tables_table):
         # table_exists = tables_table.query(
         # KeyConditionExpression=  Key('tableNumber').eq(int(body['tableNumber'])),
         # Limit=1)
-
-        response = tables_table.scan(
-            FilterExpression=Key('number').eq(int(body['tableNumber'])),
-            Limit=1 
+        key_condition_expression = Key('number').eq(int(body['tableNumber'])) 
+                                                    # Query the table
+        response = tables_table.query(
+            KeyConditionExpression=key_condition_expression
         )
+
+
+        # response = tables_table.scan(
+        #     FilterExpression=Key('number').eq(int(body['tableNumber'])),
+        #     Limit=1 
+        # )
 
         print("---done--")
         print(response)
