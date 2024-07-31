@@ -35,7 +35,7 @@ class ApiHandler(AbstractLambda):
             reservations_table = dynamodb.Table('cmtr-1bb19304-Reservations')
             USER_POOL_NAME="cmtr-1bb19304-simple-booking-userpool"
             
-            FLG_TEST=True
+            FLG_TEST=False
 
             if FLG_TEST:
                  tables_table = dynamodb.Table('cmtr-1bb19304-Tables-test')
@@ -83,11 +83,6 @@ class ApiHandler(AbstractLambda):
                 return signin(event,USER_POOL_ID,CLIENT_ID,cognito_client)
             elif event['path'].startswith('/tables/') and event['httpMethod']  == 'GET':
 
-                # if len(event['path'].split('/')) < 3:
-                #     return {
-                #         'statusCode': 400,
-                #         'body': json.dumps({'error': 'Invalid URL format.'})
-                #     }
                 print("---get table with id---")
                 print(event['path'])
                 table_id = event['path'].split('/')[-1]
@@ -101,17 +96,7 @@ class ApiHandler(AbstractLambda):
                 elif  event['httpMethod'] == 'GET':
                     print("----6---")
                     path = event['path']
-                    # print(path)
-                    # path_segments = path.split('/')
-                    # if len(path_segments) == 3:
-                    #     print("---6.1")
-                    #     # Extract the tableId from the route
-                    #     print(route)
-                    #     table_id = route.split('/')[-1]  # Get the last segment of the path
-                        
-                    #     print(f"Fetching details for tableId: {table_id}")
-                    #     return get_table_with_id( event,tables_table,table_id)
-                    # else:
+                    
                     print("---6.2")
                     return get_tables(event,tables_table)
             elif route == '/reservations':
@@ -237,7 +222,7 @@ def create_table(event,tables_table):
     # Create a new table entry
     item = {
         'id': int(body['id']),
-        'number': body['number'],
+        'number': int(body['number']),
         'places': body['places'],
         'isVip': body['isVip'],
         'minOrder': body.get('minOrder', None)
@@ -263,12 +248,19 @@ def get_table_with_id(event,tables_table,table_id):
 
     # Extract tableId from the path
     # table_id = event['pathParameters']['tableId']
+    print(table_id)
     
     # Fetch the table data from DynamoDB
     try:
         response = tables_table.get_item(
-            Key={'id': int(table_id)}  # Adjust this based on your key schema
+            Key={'number': table_id}  
         )
+        # response = tables_table.query(KeyConditionExpression=Key("number").eq(table_id))
+        # response = tables_table.scan(
+        #     FilterExpression=Key('number').eq(table_id),
+        #     Limit=1 
+        # )
+        print(response)
         
         # Check if the item was found
         if 'Item' not in response:
@@ -292,27 +284,9 @@ def get_table_with_id(event,tables_table,table_id):
             'body': json.dumps({'error': 'Internal server error.'})
         }
 
-# def get_table(event, table_id,tables_table):
-#     response = tables_table.get_item(Key={'id': table_id})
-
-#     print("---5-get_table--start")
-
-  
-#     if 'Item' in response:
-         
-#          item = {
-#              'id': response['Item']["id"],
-#              'number': response['Item']['number'],
-#              'isVip': response['Item']['isVip'],
-#              'minOrder': response['Item']['minOrder']
-#              }
-#          print("---5-get_table")
-#          return {'statusCode': 200, 'body': json.dumps(item)}
-#     else:
-#         return {'statusCode': 400, 'body': json.dumps('Table not found')}
-
 
 from boto3.dynamodb.conditions import Key
+
 def create_reservation(event,reservations_table,tables_table):
     body = json.loads(event['body'])
     reservation_id = str(uuid.uuid4())
@@ -320,58 +294,21 @@ def create_reservation(event,reservations_table,tables_table):
     print("---start 6-create_reservation-")
 
 
-    response = reservations_table.scan(Limit=1)
-
      # Check if any items were found
-    if 'Items' in response and response['Items']:
-        print("---check tables---")
-        print(body['tableNumber'])
-        # table_exists = tables_table.query(
-        # KeyConditionExpression=  Key('tableNumber').eq(int(body['tableNumber'])),
-        # Limit=1)
-        id=0
-        if int(body['tableNumber']) == 3:
-            id=15730
-        elif int(body['tableNumber']) == 1:
-            id=15728
-        elif int(body['tableNumber']) == 2:
-            id=15729       
+    print("--check table---")
+    table_id=int(body['tableNumber'])
+    print(table_id)
+    response = tables_table.query(KeyConditionExpression=Key("number").eq(table_id))
+    print(response)
+    print(response['Items'])
 
-        if id >0:
-            key_condition_expression =Key('id').eq(id) &  Key('number').eq(int(body['tableNumber'])) 
-                                                        
-            response = tables_table.query(
-                KeyConditionExpression=key_condition_expression
-            )
-
-
-            # response = tables_table.scan(
-            #     FilterExpression=Key('number').eq(int(body['tableNumber'])),
-            #     Limit=1 
-            # )
-
-            print("---done--")
-            print(response)
-        
-            # if not table_exists['Items']:
-            #     return {
-            #         'statusCode': 404,
-            #         'body': json.dumps({'error': 'Table not found.'})
-            #     } 
-            
-            if not 'Items' in response and response['Items']:
-                return {
-                    'statusCode': 400,
-                    'body': json.dumps({'error': 'Table not found.'})
-                }
-        
-   
-    
+    print("--check table end---")
+     
     # Create a new reservation entry
     item = {
         'id': reservation_id,
         'reservationId': reservation_id,
-        'tableNumber': body['tableNumber'],
+        'tableNumber': int(body['tableNumber']),
         'clientName': body['clientName'],
         'phoneNumber': body['phoneNumber'],
         'date': body['date'],
@@ -379,25 +316,6 @@ def create_reservation(event,reservations_table,tables_table):
         'slotTimeEnd': body['slotTimeEnd']
     }
     print(item)
-
-    # # Check for overlapping reservations
-    # from boto3.dynamodb.conditions import Key
-    # Check for overlapping reservations
-    # overlapping_reservations = reservations_table.query(
-    #     KeyConditionExpression=Key('id').eq(int(body['tableNumber'])),
-    #     FilterExpression=(
-    #         Key('date').eq(body['date']) & 
-    #         (Key('slotTimeStart').lt(body['slotTimeEnd'])) & 
-    #         (Key('slotTimeEnd').gt(body['slotTimeStart']))
-    #     )
-    # )
-    
-    # if overlapping_reservations['Items']:
-    #     return {
-    #         'statusCode': 400,
-    #         'body': json.dumps({'error': 'Time slot overlaps with an existing reservation.'})
-    #     }
-    
     reservations_table.put_item(Item=item)
     print("---6-create_reservation-end")
     return {'statusCode': 200, 'body': json.dumps({'reservationId': reservation_id})}
