@@ -125,7 +125,7 @@ class ApiHandler(AbstractLambda):
            
             print("---10---")
 
-            return 200
+           
         except Exception as e:
             print("----error")    
             print(e)
@@ -273,7 +273,7 @@ def get_table_with_id(event,tables_table,table_id):
         # Check if the item was found
         if 'Item' not in response:
             return {
-                'statusCode': 404,
+                'statusCode': 400,
                 'body': json.dumps({'error': 'Table not found.'})
             }
         
@@ -345,7 +345,7 @@ def create_reservation(event,reservations_table,tables_table):
         
         if not 'Items' in response and response['Items']:
             return {
-                'statusCode': 404,
+                'statusCode': 400,
                 'body': json.dumps({'error': 'Table not found.'})
             }
         
