@@ -331,7 +331,7 @@ def create_reservation(event,reservations_table,tables_table):
         # Limit=1)
 
         response = tables_table.scan(
-            FilterExpression=Key('tableNumber').eq(int(body['tableNumber'])),
+            FilterExpression=Key('number').eq(int(body['tableNumber'])),
             Limit=1 
         )
 
