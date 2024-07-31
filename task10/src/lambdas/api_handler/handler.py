@@ -326,17 +326,29 @@ def create_reservation(event,reservations_table,tables_table):
     if 'Items' in response and response['Items']:
         print("---check tables---")
         print(body['tableNumber'])
-        table_exists = tables_table.query(
-        KeyConditionExpression=  Key('tableNumber').eq(int(body['tableNumber'])),
-        Limit=1)
+        # table_exists = tables_table.query(
+        # KeyConditionExpression=  Key('tableNumber').eq(int(body['tableNumber'])),
+        # Limit=1)
+
+        response = tables_table.scan(
+            FilterExpression=Key('tableNumber').eq(int(body['tableNumber'])),
+            Limit=1 
+        )
 
         print("---done--")
     
-        if not table_exists['Items']:
+        # if not table_exists['Items']:
+        #     return {
+        #         'statusCode': 404,
+        #         'body': json.dumps({'error': 'Table not found.'})
+        #     } 
+        
+        if not 'Items' in response and response['Items']:
             return {
                 'statusCode': 404,
                 'body': json.dumps({'error': 'Table not found.'})
-            } 
+            }
+        
    
     
     # Create a new reservation entry
