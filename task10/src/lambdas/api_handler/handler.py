@@ -327,7 +327,7 @@ def create_reservation(event,reservations_table,tables_table):
         print("---check tables---")
         print(body['tableNumber'])
         table_exists = tables_table.query(
-        KeyConditionExpression=  Key('id').eq(int(body['tableNumber'])),
+        KeyConditionExpression=  Key('tableNumber').eq(int(body['tableNumber'])),
         Limit=1)
 
         print("---done--")
