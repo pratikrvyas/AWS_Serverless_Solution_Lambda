@@ -344,7 +344,7 @@ def create_reservation(event,reservations_table,tables_table):
                 print("--start time confflict")
                 print(itm["slotTimeStart"])
                 print(body['slotTimeStart'])
-                if int(str(itm["slotTimeEnd"]).replace(":","")) >= int(str(body['slotTimeEnd']).replace(":","")):
+                if int(str(itm["slotTimeEnd"]).replace(":","")) <= int(str(body['slotTimeEnd']).replace(":","")):
                     print("--end time confflict")
                     print(itm["slotTimeEnd"])
                     print(body['slotTimeEnd'])
