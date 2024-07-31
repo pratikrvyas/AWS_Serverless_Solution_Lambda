@@ -329,8 +329,16 @@ def create_reservation(event,reservations_table,tables_table):
         # table_exists = tables_table.query(
         # KeyConditionExpression=  Key('tableNumber').eq(int(body['tableNumber'])),
         # Limit=1)
-        key_condition_expression = Key('number').eq(int(body['tableNumber'])) 
-                                                    # Query the table
+        id=0
+        if int(body['tableNumber']) == 3:
+            id=15730
+        elif int(body['tableNumber']) == 1:
+            id=15728
+        elif int(body['tableNumber']) == 2:
+            id=15729       
+
+        key_condition_expression =Key('id').eq(id) &  Key('number').eq(int(body['tableNumber'])) 
+                                                    
         response = tables_table.query(
             KeyConditionExpression=key_condition_expression
         )
