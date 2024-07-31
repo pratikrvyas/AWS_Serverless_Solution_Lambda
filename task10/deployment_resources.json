@@ -122,6 +122,25 @@
           "enable_proxy":true
         }
       },
+      "/tables/{tableId}": {  
+        "enable_cors": false,
+        "GET": {
+          "authorization_type": "authorizer",
+          "integration_type": "lambda",
+          "lambda_name": "api_handler",
+          "api_key_required": false,
+          "method_request_parameters": {
+            "method.request.header.Authorization": true,
+            "method.request.path.tableId": true  
+          },
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true,
+          "enable_proxy": true
+        }
+      },
+    
       "/reservations": {
         "enable_cors": false,
         "GET": {

@@ -71,6 +71,9 @@ class ApiHandler(AbstractLambda):
             print("---client id")
             print(CLIENT_ID)
 
+            print(route)
+
+           
 
             if route == '/signup':
                 print("---1")
@@ -78,13 +81,38 @@ class ApiHandler(AbstractLambda):
             elif route == '/signin':
                 print("---2")
                 return signin(event,USER_POOL_ID,CLIENT_ID,cognito_client)
+            elif event['path'].startswith('/tables/') and event['httpMethod']  == 'GET':
+
+                # if len(event['path'].split('/')) < 3:
+                #     return {
+                #         'statusCode': 400,
+                #         'body': json.dumps({'error': 'Invalid URL format.'})
+                #     }
+                print("---get table with id---")
+                print(event['path'])
+                table_id = event['path'].split('/')[-1]
+                return get_table_with_id(event,tables_table,table_id)
+
             elif route == '/tables':
                 print("---3")
                 if event['httpMethod'] == 'POST':
                     print("---3")
                     return create_table(event,tables_table)
                 elif  event['httpMethod'] == 'GET':
-                    print("---6")
+                    print("----6---")
+                    path = event['path']
+                    # print(path)
+                    # path_segments = path.split('/')
+                    # if len(path_segments) == 3:
+                    #     print("---6.1")
+                    #     # Extract the tableId from the route
+                    #     print(route)
+                    #     table_id = route.split('/')[-1]  # Get the last segment of the path
+                        
+                    #     print(f"Fetching details for tableId: {table_id}")
+                    #     return get_table_with_id( event,tables_table,table_id)
+                    # else:
+                    print("---6.2")
                     return get_tables(event,tables_table)
             elif route == '/reservations':
                 if event['httpMethod'] == 'POST':
@@ -190,6 +218,7 @@ def convert_decimal_to_float(obj):
 
 def get_tables(event,tables_table):
     print("---3-get_tables--start")
+
     # Fetch tables from DynamoDB
     response = tables_table.scan()
    
@@ -202,11 +231,12 @@ def get_tables(event,tables_table):
 
 def create_table(event,tables_table):
     body = json.loads(event['body'])
-    table_id = body['id'] # str(uuid.uuid4())
+    
+  
     print("---4-create_table--start")
     # Create a new table entry
     item = {
-        'id': str(table_id),
+        'id': str(body['id']),
         'number': body['number'],
         'places': body['places'],
         'isVip': body['isVip'],
@@ -215,33 +245,90 @@ def create_table(event,tables_table):
     
     tables_table.put_item(Item=item)
     print("---4-create_table--end")
-    return {'statusCode': 200, 'body': json.dumps({'id': table_id})}
+    return {'statusCode': 200, 'body': json.dumps({'id': body['id']})}
 
 
-def get_table(event, table_id,tables_table):
-    response = tables_table.get_item(Key={'id': table_id})
+def serialize_item(item):
+    """Convert DynamoDB item to a JSON serializable format."""
+    if isinstance(item, dict):
+        return {k: serialize_item(v) for k, v in item.items()}
+    elif isinstance(item, list):
+        return [serialize_item(i) for i in item]
+    elif isinstance(item, Decimal):
+        return float(item)  # Convert Decimal to float
+    else:
+        return item  # Return the item as is if it's already serializable
 
-    print("---5-get_table--start")
+def get_table_with_id(event,tables_table,table_id):
+
+    # Extract tableId from the path
+    # table_id = event['pathParameters']['tableId']
+    
+    # Fetch the table data from DynamoDB
+    try:
+        response = tables_table.get_item(
+            Key={'id': table_id}  # Adjust this based on your key schema
+        )
+        
+        # Check if the item was found
+        if 'Item' not in response:
+            return {
+                'statusCode': 404,
+                'body': json.dumps({'error': 'Table not found.'})
+            }
+        
+        table_data = response['Item']
+        
+        # Prepare the response
+        return {
+            'statusCode': 200,
+            'body': json.dumps(serialize_item(table_data))
+        }
+    
+    except Exception as e:
+        print(f"Error fetching table data: {e}")
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': 'Internal server error.'})
+        }
+
+# def get_table(event, table_id,tables_table):
+#     response = tables_table.get_item(Key={'id': table_id})
+
+#     print("---5-get_table--start")
 
   
-    if 'Item' in response:
+#     if 'Item' in response:
          
-         item = {
-             'id': response['Item']["id"],
-             'number': response['Item']['number'],
-             'isVip': response['Item']['isVip'],
-             'minOrder': response['Item']['minOrder']
-             }
-         print("---5-get_table")
-         return {'statusCode': 200, 'body': json.dumps(item)}
-    else:
-        return {'statusCode': 400, 'body': json.dumps('Table not found')}
+#          item = {
+#              'id': response['Item']["id"],
+#              'number': response['Item']['number'],
+#              'isVip': response['Item']['isVip'],
+#              'minOrder': response['Item']['minOrder']
+#              }
+#          print("---5-get_table")
+#          return {'statusCode': 200, 'body': json.dumps(item)}
+#     else:
+#         return {'statusCode': 400, 'body': json.dumps('Table not found')}
 
 def create_reservation(event,reservations_table):
     body = json.loads(event['body'])
     reservation_id = str(uuid.uuid4())
     
     print("---start 6-create_reservation-")
+
+    # Check if the requested table exists
+    # table_exists = reservations_table.query(
+    #     KeyConditionExpression=Key('tableNumber').eq(body['tableNumber']),
+    #     Limit=1
+    # )
+    
+    # if not table_exists['Items']:
+    #     return {
+    #         'statusCode': 404,
+    #         'body': json.dumps({'error': 'Table not found.'})
+    #     }
+    
    
     
     # Create a new reservation entry
