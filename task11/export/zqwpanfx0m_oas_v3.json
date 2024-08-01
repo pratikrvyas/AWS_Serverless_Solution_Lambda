@@ -28,8 +28,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "200 response",
+          "Reservations": {
+            "description": "Get Reservation Details",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -78,8 +78,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "200 response",
+          "Reservations": {
+            "description": "Reservation Request",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -118,8 +118,8 @@
       },
       "options": {
         "responses": {
-          "200": {
-            "description": "200 response",
+          "Reservation": {
+            "description": "Reservation",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -178,8 +178,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "200 response",
+          "Tables": {
+            "description": "List of tables",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -228,8 +228,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "200 response",
+          "Tables": {
+            "description": "Add table",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -268,8 +268,8 @@
       },
       "options": {
         "responses": {
-          "200": {
-            "description": "200 response",
+          "Tables": {
+            "description": "Tables",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -318,8 +318,8 @@
     "/signin": {
       "post": {
         "responses": {
-          "200": {
-            "description": "200 response",
+          "Signin": {
+            "description": "Signin Request",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -353,8 +353,8 @@
       },
       "options": {
         "responses": {
-          "200": {
-            "description": "200 response",
+          "Signin": {
+            "description": "Sigin",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -403,8 +403,8 @@
     "/signup": {
       "post": {
         "responses": {
-          "200": {
-            "description": "200 response",
+          "SignUp": {
+            "description": "SignUp Request",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -437,9 +437,9 @@
         }
       },
       "options": {
-        "responses": {
-          "200": {
-            "description": "200 response",
+        "SignUp": {
+          "SignUp": {
+            "description": "SignUp",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -506,8 +506,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "200 response",
+          "Tables": {
+            "description": "Tables",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -556,8 +556,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "200 response",
+          "Tables": {
+            "description": "Tables",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
