@@ -19,6 +19,16 @@
       "get": {
         "summary": "Retrieve all reservations",
         "description": "This endpoint retrieves a list of all reservations made in the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "parameters": [
           {
             "name": "Authorization",
@@ -71,6 +81,16 @@
       "post": {
         "summary": "Save reservations",
         "description": "This endpoint save reservations in the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         
         "parameters": [
           {
@@ -124,9 +144,19 @@
       "options": {
         "summary": "Save reservations",
         "description": "This endpoint save reservations in the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "Reservation",
             "headers": {
               "Access-Control-Allow-Origin": {
                 "schema": {
@@ -176,6 +206,16 @@
       "get": {
         "summary": "Retrieve all tables",
         "description": "This endpoint retrieves a list of all tables from the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "parameters": [
           {
             "name": "Authorization",
@@ -228,6 +268,16 @@
       "post": {
         "summary": "Add tables",
         "description": "This endpoint add table details in the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "parameters": [
           {
             "name": "Authorization",
@@ -280,6 +330,16 @@
       "options": {
         "summary": "Add tables",
         "description": "This endpoint add table details in the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "responses": {
           "200": {
             "description": "200 response",
@@ -333,6 +393,16 @@
       "post": {
         "summary": "Sigin Request",
         "description": "This endpoint enable user to sigin in the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "responses": {
           "200": {
             "description": "200 response",
@@ -370,6 +440,16 @@
       "options": {
         "summary": "Sigin Request",
         "description": "This endpoint enable user to sigin in the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "responses": {
           "200": {
             "description": "200 response",
@@ -423,6 +503,16 @@
       "post": {
         "summary": "Signup Request",
         "description": "This endpoint enable user to signup in the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "responses": {
           "200": {
             "description": "200 response",
@@ -460,6 +550,16 @@
       "options": {
         "summary": "Signup Request",
         "description": "This endpoint enable user to signup in the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "responses": {
           "200": {
             "description": "200 response",
@@ -512,6 +612,16 @@
       "get": {
         "summary": "Retrieve table for a given id",
         "description": "This endpoint retrieves table for a given id from the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "parameters": [
           {
             "name": "tableId",
@@ -572,6 +682,16 @@
       "options": {
         "summary": "Retrieve table for a given id",
         "description": "This endpoint retrieves table for a given id from the system.",
+        "requestBody": {
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReservationRequest"
+                  }
+                }
+              }
+            },
         "parameters": [
           {
             "name": "tableId",
