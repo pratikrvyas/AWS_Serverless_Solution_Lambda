@@ -24,7 +24,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref": "#/components/schemas/Empty"
                   }
                 }
               }
@@ -86,7 +86,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref": "#/components/schemas/Empty"
                   }
                 }
               }
@@ -149,7 +149,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref": "#/components/schemas/Empty"
                   }
                 }
               }
@@ -211,7 +211,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref": "#/components/schemas/Empty"
                   }
                 }
               }
@@ -273,7 +273,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref": "#/components/schemas/Empty"
                   }
                 }
               }
@@ -335,7 +335,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref": "#/components/schemas/Empty"
                   }
                 }
               }
@@ -363,7 +363,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Empty"
+                  "$ref":"#/components/schemas/Empty"
                 }
               }
             }
@@ -398,7 +398,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref": "#/components/schemas/Empty"
                   }
                 }
               }
@@ -445,7 +445,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref": "#/components/schemas/Empty"
                   }
                 }
               }
@@ -508,7 +508,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref": "#/components/schemas/Empty"
                   }
                 }
               }
@@ -555,7 +555,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref": "#/components/schemas/Empty"
                   }
                 }
               }
@@ -617,7 +617,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
+                    "$ref":"#/components/schemas/Empty"
                   }
                 }
               }
@@ -682,16 +682,7 @@
       "options": {
         "summary": "Retrieve table for a given id",
         "description": "This endpoint retrieves table for a given id from the system.",
-        "requestBody": {
-              "required": true,
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/ReservationRequest"
-                  }
-                }
-              }
-            },
+        
         "parameters": [
           {
             "name": "tableId",
